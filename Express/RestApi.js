@@ -2,8 +2,9 @@ const express = require('express');
 const PORT = 3000;
 const users = require('./MOCK_DATA.json')
 const app = express();
-
-
+const fs = require('fs')
+//middleware -plugin
+app.use(express.urlencoded({ extended: false }))
 
 //routes
 app.get("/api/users", (req, res) => {
@@ -18,17 +19,24 @@ app.get("/api/users/:id", (req, res) => {
 
 app.post("/api/users", (req, res) => {
     //todo: Create user
-   return res.json({status: 'pending'})
+    const body = req.body;
+    console.log(body);
+    users.push({ ...body, id: users.length + 1 })
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+        return res.json({ status: 'success', id: users.length })
+    })
+
+    //    return res.json({status: 'pending'})
 })
 
 app.patch("/api/users/:id", (req, res) => {
     //todo: edit the user with id
-   return res.json({status: 'pending'})
+    return res.json({ status: 'pending' })
 })
 
 app.delete("/api/users/:id", (req, res) => {
     //todo: delete user
-   return res.json({status: 'pending'})
+    return res.json({ status: 'pending' })
 })
 app.listen(PORT, console.log(`the server is runing port ${PORT}`)
 )
